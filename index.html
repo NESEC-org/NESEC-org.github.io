@@ -38,8 +38,8 @@
       }
 
       #infoDiv {
-        background-color: white;
-        color: black;
+        background-color: rgba(0, 0, 0, 0.75);
+        color: white;
         padding: 6px;
         width: 400px;
       }
@@ -59,17 +59,18 @@
       }
 
       #akViewDiv {
-        padding: 0;
+        padding: 5;
         margin: 0;
         height: 550px;
         width: 400px;
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: rgba(0, 0, 0, 0.65);
       }
 
       p {
         text-align: center;
         padding: 5px;
       }
+
 
     </style>
 
@@ -165,23 +166,53 @@
         });
         view.ui.add("infoDiv", "top-right");
 
-        const akView = new MapView({
+        var akView = new MapView({
           container: "akViewDiv",
           map: map,
           extent: {
-            xmin: -82.92,
-            ymin: 24.45,
-            xmax: -66.95,
-            ymax: 45.64,
+            xmin: -68,
+            ymin: 31,
+            xmax: -79,
+            ymax: 40,
             spatialReference: {
               wkid: 4326
-            }
-          },
-          spatialReference: {
-            wkid: 4326
+            },
+            spatialReference: {
+              wkid: 4326
+            },
           },
         });
         view.ui.add("akViewDiv", "bottom-right");
+
+        akView.when(function() {
+          limitMapExtent(akView);
+        });
+
+        function limitMapExtent(akView) {
+          const initialExtent = akView.extent;
+          akView.watch('stationary', function(event) {
+            var currentCenter = akView.extent.center;
+            if (!initialExtent.contains(currentCenter)) {
+
+              var newCenter = akView.extent.center;
+
+              if (currentCenter.x < initialExtent.xmin) {
+                newCenter.x = initialExtent.center.x
+              }
+              if (currentCenter.x > initialExtent.xmax) {
+                newCenter.x = initialExtent.center.x;
+              }
+              if (currentCenter.y < initialExtent.ymin) {
+                newCenter.y = initialExtent.center.y;
+              }
+              if (currentCenter.y > initialExtent.ymax) {
+                newCenter.y = initialExtent.center.y;
+              }
+              akView.goTo(newCenter);
+              //akView.extent = initialExtent;
+            }
+          });
+        }
 
         // query all features from the countys layer
         view
@@ -266,16 +297,34 @@
           setcountysDefinitionExpression(type);
         });
 
+        //queryCounties.addEventListener("click", function() {
+        //  displayResults();
+        //});
+
         queryCounties.addEventListener("click", function() {
-          displayResults();
+          var popVa = Number(selectPop.value);
+          var propVa = Number(selectBuild.value);
+          var cefVa = Number(selectCEF.value);
+          var total = popVa+propVa+cefVa;
+          if (total == 100) {
+            displayResults();
+          }
+          else {
+            displayError();
+          }
         });
+
+        function displayError(results) {
+          resultsLayer.removeAll();
+          document.getElementById("results").innerHTML = "<span style= 'color: red;'>Please provide three weight values which add up exactly to 100% <i>(for example 30% + 50% + 20% = 100%)</i><span>";
+        };
 
         function displayResults(results) {
           resultsLayer.removeAll();
           var pop = ((selectPop.value)/100) * popVar;
           var build = ((selectBuild.value)/100) * propVar;
           var CEFs = ((selectCEF.value)/100) * cefVar;
-          var finalWeighted = pop + build + CEFs;
+          var finalWeighted = (pop + build + CEFs).toFixed(2);
           var weightedRank;
           if (finalWeighted <= 1) {
             weightedRank = "Very Low Risk";
@@ -295,9 +344,12 @@
   </head>
 
   <body>
-    <div id="feature-node" class="esri-widget"><a href="http://nesec.org/"><img src="https://drive.google.com/uc?export=view&id=17NW9Aj2ApbbehZCfe4AROXUAhB4Y9CXh" width = "100%" ></a><br><br>
-      <p><img src="https://drive.google.com/uc?export=view&id=1iehw0pIAZ8_QpG6F2IC3NcejkvY0yXUP" width = "35%"><br><br>Our risk metric is based on three criteria: 1) population, 2) property value, and 3) critical & essential facilities. Data was provided by the HAZUS-MH inventory. By default, the risk calculation is unweighted, meaning all model inputs have an equal influence on determining the final risk ranking. Download county risk layer <a href="http://www.arcgis.com/home/item.html?id=1c47510e0acb47d8b5a35fac079712f8">here</a></p><br><br><br>
-      <p><img src="https://drive.google.com/uc?export=view&id=1U-3chPg13BzDrzlFWwDFfhu9hVgVKXu-" width = "50%"><br><br>Tsunami layer provided by University of Rhode Island and University of Delaware, and modeled with FUNWAVE-TVD. A combined-tsunami scenario was used, where the worst-case scenario was always taken. The tsunami flood model was ran using 450 m Cartesian grids. As higher resolution data becomes available the tsunami flood line is expected to be less dramatic. Download tsunami layer <a href="http://www.arcgis.com/home/item.html?id=c90fbea1abc648d99f26372ab506e071">here</a></p>
+    <div id="feature-node" class="esri-widget"><a href="http://nesec.org/"><img src="https://drive.google.com/uc?export=view&id=17NW9Aj2ApbbehZCfe4AROXUAhB4Y9CXh" width = "100%" ></a><br>
+      <p><img src="https://drive.google.com/uc?export=view&id=15uaXfl0ZWVz3ddO1gR9bN250voWXsu8Q" width = "200"><br><br>Our risk metric is based on three criteria: 1) population, 2) property value, and 3) critical & essential facilities. Data was provided by the HAZUS-MH inventory. By default, the risk calculation is unweighted, meaning all model inputs have an equal influence on determining the final risk ranking. Download county risk layer <a href="http://www.arcgis.com/home/item.html?id=1c47510e0acb47d8b5a35fac079712f8" target="_blank">here</a><br></p>
+      <p><b>People</b> the total # of people within a county.</p>
+      <p><b>Property</b> total building stock dollar exposure (in thousands) within a county.</p>
+      <p><b>Critical facilities</b> total number of critical facilities, defined as "essential for the delivery of vital services or for protection of a community" (FEMA). </p2><br><br>
+      <p><img src="https://drive.google.com/uc?export=view&id=1X9lLOCHY3ZzaSXI-Cx-hLuzoehDlCvYp" width = "200"><br><br>Tsunami layer provided by University of Rhode Island and University of Delaware, and modeled with <a href="https://fengyanshi.github.io/build/html/index.html" target="_blank">FUNWAVE-TVD</a>. A combined-tsunami scenario was used, where the worst-case scenario was always taken. The tsunami flood model was ran using 450 m Cartesian grids. As higher resolution data becomes available the tsunami flood line is expected to be less dramatic. Download tsunami layer <a href="http://www.arcgis.com/home/item.html?id=c90fbea1abc648d99f26372ab506e071" target="_blank">here</a></p>
 
     </div>
     <div id="viewDiv"></div>
