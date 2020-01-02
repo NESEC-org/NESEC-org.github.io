@@ -322,13 +322,13 @@
           var CEFs = ((selectCEF.value)/100) * cefVar;
           var finalWeighted = (pop + build + CEFs).toFixed(2);
           var weightedRank;
-          if (finalWeighted < 2) {
+          if (finalWeighted <= 1) {
             weightedRank = "Very Low Risk";
-          } else if (finalWeighted < 3 && finalWeighted >= 2) {
+          } else if (finalWeighted > 1 && finalWeighted <= 2) {
             weightedRank = "Low Risk";
-          } else if (finalWeighted < 4 && finalWeighted >= 3) {
+          } else if (finalWeighted > 2 && finalWeighted <= 3) {
             weightedRank = "Moderate Risk";
-          } else if (finalWeighted < 5 && finalWeighted >= 4) {
+          } else if (finalWeighted > 3 && finalWeighted <= 4) {
             weightedRank = "High Risk";
           } else {
             weightedRank = "Very High Risk";
@@ -360,5 +360,3 @@
       <div id="results" class="esri-widget"></div>
       </div>
     <div id="akViewDiv" class="esri-widget"></div>
-  </body>
-</html>
