@@ -124,9 +124,9 @@
         const countysLayer = new FeatureLayer({
           portalItem: {
             // autocasts as new PortalItem()
-            id: "6efb8ec5f6f64681bae349398b4d7ca3"
+            id: "5718b6fe9e7b4679b19f12187a857ba0"
           },
-          outFields: ["NAMELSAD", "Rank_Pop", "Rank_Expos", "Rank_CEF"],
+          outFields: [],
           visible: true
         });
 
@@ -141,7 +141,7 @@
         const countysLayer2 = new FeatureLayer({
           portalItem: {
             // autocasts as new PortalItem()
-            id: "1c47510e0acb47d8b5a35fac079712f8"
+            id: "bb5be204e30a4a8caf7c34ef58f78a46"
           },
           visible: true
         });
@@ -297,10 +297,6 @@
           setcountysDefinitionExpression(type);
         });
 
-        //queryCounties.addEventListener("click", function() {
-        //  displayResults();
-        //});
-
         queryCounties.addEventListener("click", function() {
           var popVa = Number(selectPop.value);
           var propVa = Number(selectBuild.value);
@@ -326,13 +322,13 @@
           var CEFs = ((selectCEF.value)/100) * cefVar;
           var finalWeighted = (pop + build + CEFs).toFixed(2);
           var weightedRank;
-          if (finalWeighted <= 1) {
+          if (finalWeighted < 2) {
             weightedRank = "Very Low Risk";
-          } else if (finalWeighted <= 2) {
+          } else if (finalWeighted < 3 && finalWeighted >= 2) {
             weightedRank = "Low Risk";
-          } else if (finalWeighted <= 3) {
+          } else if (finalWeighted < 4 && finalWeighted >= 3) {
             weightedRank = "Moderate Risk";
-          } else if (finalWeighted <= 4) {
+          } else if (finalWeighted < 5 && finalWeighted >= 4) {
             weightedRank = "High Risk";
           } else {
             weightedRank = "Very High Risk";
@@ -345,8 +341,8 @@
 
   <body>
     <div id="feature-node" class="esri-widget"><a href="http://nesec.org/"><img src="https://drive.google.com/uc?export=view&id=17NW9Aj2ApbbehZCfe4AROXUAhB4Y9CXh" width = "100%" ></a><br>
-      <p><img src="https://drive.google.com/uc?export=view&id=15uaXfl0ZWVz3ddO1gR9bN250voWXsu8Q" width = "200"><br><br>Our risk metric is based on three criteria: 1) population, 2) property value, and 3) critical & essential facilities. Data was provided by the HAZUS-MH inventory. By default, the risk calculation is unweighted, meaning all model inputs have an equal influence on determining the final risk ranking. Download county risk layer <a href="http://www.arcgis.com/home/item.html?id=1c47510e0acb47d8b5a35fac079712f8" target="_blank">here</a><br></p>
-      <p><b>People</b> the total # of people within a county.</p>
+      <p><img src="https://drive.google.com/uc?export=view&id=15uaXfl0ZWVz3ddO1gR9bN250voWXsu8Q" width = "200"><br><br>Our risk metric is based on three criteria: 1) population, 2) property value, and 3) critical & essential facilities. Data was provided by the <a href="https://msc.fema.gov/portal/resources/hazus" target="_blank">HAZUS-MH</a> inventory. By default, the risk calculation is unweighted, meaning all model inputs have an equal influence on determining the final risk ranking. Download county risk layer <a href="http://www.arcgis.com/home/item.html?id=bb5be204e30a4a8caf7c34ef58f78a46" target="_blank">here</a><br></p>
+      <p><b>Population</b> the total # of people within a county.</p>
       <p><b>Property</b> total building stock dollar exposure (in thousands) within a county.</p>
       <p><b>Critical facilities</b> total number of critical facilities, defined as "essential for the delivery of vital services or for protection of a community" (FEMA). </p2><br><br>
       <p><img src="https://drive.google.com/uc?export=view&id=1X9lLOCHY3ZzaSXI-Cx-hLuzoehDlCvYp" width = "200"><br><br>Tsunami layer provided by University of Rhode Island and University of Delaware, and modeled with <a href="https://fengyanshi.github.io/build/html/index.html" target="_blank">FUNWAVE-TVD</a>. A combined-tsunami scenario was used, where the worst-case scenario was always taken. The tsunami flood model was ran using 450 m Cartesian grids. As higher resolution data becomes available the tsunami flood line is expected to be less dramatic. Download tsunami layer <a href="http://www.arcgis.com/home/item.html?id=c90fbea1abc648d99f26372ab506e071" target="_blank">here</a></p>
