@@ -6,7 +6,7 @@
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
 
-<title>USEC Counties Tsunami Risk Map by NESEC</title>
+<title>Query features from a FeatureLayer - 4.13</title>
 
     <link
       rel="stylesheet"
@@ -42,6 +42,7 @@
         color: white;
         padding: 6px;
         width: 400px;
+        position: fixed;
       }
 
       #drop-downs {
@@ -64,7 +65,9 @@
         height: 550px;
         width: 400px;
         background-color: rgba(0, 0, 0, 0.65);
-      }
+        z-index: -1;
+        position: relative;
+            }
 
       p {
         text-align: center;
@@ -345,11 +348,10 @@
       <p><b>Population</b> the total # of people within a county.</p>
       <p><b>Property</b> total building stock dollar exposure (in thousands) within a county.</p>
       <p><b>Critical facilities</b> total number of critical facilities, defined as "essential for the delivery of vital services or for protection of a community" (FEMA). </p2><br><br>
-      <p><img src="https://drive.google.com/uc?export=view&id=1X9lLOCHY3ZzaSXI-Cx-hLuzoehDlCvYp" width = "215"><br><br>Tsunami layer provided by University of Rhode Island and University of Delaware, and modeled with <a href="https://fengyanshi.github.io/build/html/index.html" target="_blank">FUNWAVE-TVD</a>. A combined-tsunami scenario was used, where the worst-case scenario was always taken. The tsunami flood model was ran using 450 m Cartesian grids. As higher resolution data becomes available the tsunami flood line is expected to be less dramatic. Download tsunami layer <a href="http://www.arcgis.com/home/item.html?id=c90fbea1abc648d99f26372ab506e071" target="_blank">here</a></p>
-
+      <p><img src="https://drive.google.com/uc?export=view&id=1X9lLOCHY3ZzaSXI-Cx-hLuzoehDlCvYp" width = "215"><br><br>Tsunami layer provided by University of Rhode Island and University of Delaware, and modeled with <a href="https://fengyanshi.github.io/build/html/index.html" target="_blank">FUNWAVE-TVD</a>. A combined-tsunami scenario was used, where the worst-case scenario was always taken. "Wet zones" are an indiciation of the maximum potential extent of water. As higher resolution data becomes available, the tsunami flood line is expected to be less dramatic. Download tsunami layer <a href="http://www.arcgis.com/home/item.html?id=c90fbea1abc648d99f26372ab506e071" target="_blank">here</a></p>
     </div>
+
     <div id="viewDiv"></div>
-    <div id="akViewDiv" class="esri-widget"></div>
     <div id="infoDiv" class="esri-widget"><p><b>Create your own weighted risk metric</b></p><br>
       <div id="drop-downs">Select county:
         <select id="county-type" class="esri-widget"></select></div>
@@ -359,4 +361,6 @@
       <p><button id="query-Counties" class="esri-widget">Calculate Risk</button></p>
       <div id="results" class="esri-widget"></div>
       </div>
-    <div id="akViewDiv" class="esri-widget"></div>
+      <div id="akViewDiv" class="esri-widget"></div>
+  </body>
+</html>
